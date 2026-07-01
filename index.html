@@ -501,27 +501,40 @@ document.getElementById('btnJpg').addEventListener('click', ()=>{
   const scroller = target.querySelector('.scroller');
   const grid = document.getElementById('grid');
 
-  // Temporarily let the scroller show its full width instead of clipping it
-  const prevOverflow = scroller.style.overflow;
-  const prevWidth = scroller.style.width;
+  // Save original styles that clip/scroll the content
+  const prev = {
+    boardOverflow: target.style.overflow,
+    boardWidth: target.style.width,
+    scrollerOverflow: scroller.style.overflow,
+    scrollerWidth: scroller.style.width,
+    scrollLeft: scroller.scrollLeft
+  };
+
+  const fullWidth = grid.scrollWidth;
+
+  // Temporarily un-clip everything so the entire grid is actually painted
+  target.style.overflow = 'visible';
+  target.style.width = fullWidth + 'px';
   scroller.style.overflow = 'visible';
-  scroller.style.width = grid.scrollWidth + 'px';
+  scroller.style.width = fullWidth + 'px';
+  scroller.scrollLeft = 0;
 
   html2canvas(target, {
     backgroundColor:'#ffffff',
     scale:2,
-    width: target.scrollWidth,
-    height: target.scrollHeight,
-    windowWidth: target.scrollWidth,
-    windowHeight: target.scrollHeight
+    width: fullWidth,
+    windowWidth: fullWidth
   }).then(canvas=>{
     const link = document.createElement('a');
     link.download = 'BME_4-1_timetable.jpg';
     link.href = canvas.toDataURL('image/jpeg', 0.95);
     link.click();
   }).finally(()=>{
-    scroller.style.overflow = prevOverflow;
-    scroller.style.width = prevWidth;
+    target.style.overflow = prev.boardOverflow;
+    target.style.width = prev.boardWidth;
+    scroller.style.overflow = prev.scrollerOverflow;
+    scroller.style.width = prev.scrollerWidth;
+    scroller.scrollLeft = prev.scrollLeft;
   });
 });
 </script>
