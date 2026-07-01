@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>BME 4-1 Timetable Builder</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#faf8f3;
+    --ink:#1c2452;
+    --ink-soft:#4b5170;
+    --line:#e4e0d4;
+    --break:#f2b134;
+    --break-bg:#fff6e0;
+    --card:#ffffff;
+    --shadow: 0 1px 2px rgba(28,36,82,0.04), 0 8px 24px rgba(28,36,82,0.06);
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background: var(--paper);
+    background-image:
+      radial-gradient(circle at 1px 1px, rgba(28,36,82,0.05) 1px, transparent 0);
+    background-size: 22px 22px;
+    font-family: 'Inter', sans-serif;
+    color: var(--ink);
+    padding: 32px 20px 60px;
+  }
+  .wrap{ max-width: 1180px; margin: 0 auto; }
+
+  /* ---- Header ---- */
+  header{
+    display:flex; align-items:flex-end; justify-content:space-between;
+    gap: 20px; flex-wrap:wrap;
+    margin-bottom: 26px;
+    padding-bottom: 18px;
+    border-bottom: 2px solid var(--ink);
+  }
+  .eyebrow{
+    font-family:'JetBrains Mono', monospace;
+    font-size: 11px; letter-spacing: 0.14em; text-transform:uppercase;
+    color: var(--ink-soft); margin: 0 0 6px;
+  }
+  h1{
+    font-family:'Fraunces', serif; font-weight:700; font-optical-sizing:auto;
+    font-size: 40px; line-height:1; margin:0; color:var(--ink);
+  }
+  h1 span{ color:#1F7A6E; }
+  .sub{ font-size:14px; color:var(--ink-soft); margin-top:8px; max-width:480px; }
+  .term-badge{
+    font-family:'JetBrains Mono',monospace;
+    background: var(--ink); color:#fff; padding:10px 16px;
+    border-radius: 10px; font-size:13px; text-align:right; line-height:1.5;
+  }
+  .term-badge b{ font-family:'Fraunces',serif; font-size:18px; display:block; font-weight:600;}
+
+  /* ---- Controls ---- */
+  .panel{
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    padding: 20px 22px;
+    box-shadow: var(--shadow);
+    margin-bottom: 26px;
+  }
+  .panel h2{
+    font-size:11px; text-transform:uppercase; letter-spacing:0.1em;
+    color: var(--ink-soft); margin: 0 0 12px; font-weight:600;
+  }
+  .row{ display:flex; flex-wrap:wrap; gap:10px; align-items:center; }
+  .row + .row{ margin-top:16px; padding-top:16px; border-top: 1px dashed var(--line); }
+
+  .chip{
+    display:inline-flex; align-items:center; gap:8px;
+    border: 1.5px solid var(--line);
+    background:#fff;
+    padding: 7px 14px 7px 10px;
+    border-radius: 999px;
+    cursor:pointer;
+    font-size:13.5px; font-weight:600;
+    user-select:none;
+    transition: all .15s ease;
+    position:relative;
+  }
+  .chip input{ position:absolute; opacity:0; pointer-events:none; }
+  .chip .dot{
+    width:10px; height:10px; border-radius:50%;
+    background: var(--dot, #ccc);
+    box-shadow: inset 0 0 0 2px rgba(255,255,255,0.6);
+    opacity:0.35;
+    transition: opacity .15s ease, transform .15s ease;
+  }
+  .chip.on{ border-color: var(--dot, var(--ink)); background: color-mix(in srgb, var(--dot, #ccc) 10%, white); }
+  .chip.on .dot{ opacity:1; transform: scale(1.15); }
+  .chip .code{ color: var(--ink); }
+  .chip .name{ color: var(--ink-soft); font-weight:500; }
+  .chip.disabled{ opacity:0.4; cursor:not-allowed; }
+
+  .toggle-group{ display:inline-flex; border-radius:999px; border:1.5px solid var(--ink); overflow:hidden; }
+  .toggle-group button{
+    font-family:'JetBrains Mono',monospace; font-size:12.5px; font-weight:500;
+    padding: 8px 16px; border:none; background:#fff; color:var(--ink); cursor:pointer;
+    transition: all .15s ease;
+  }
+  .toggle-group button.active{ background:var(--ink); color:#fff; }
+  .toggle-group button + button{ border-left: 1.5px solid var(--ink); }
+
+  .label-inline{ font-size:12.5px; color:var(--ink-soft); font-weight:600; margin-right:4px;}
+
+  /* ---- Legend ---- */
+  .legend{ display:flex; flex-wrap:wrap; gap:14px; margin-top: 4px;}
+  .legend .item{ display:flex; align-items:center; gap:6px; font-size:12px; color:var(--ink-soft); }
+  .legend .sw{ width:10px; height:10px; border-radius:3px; }
+
+  /* ---- Timetable card ---- */
+  .board{
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    box-shadow: var(--shadow);
+    overflow: hidden;
+  }
+  .board-head{
+    padding: 18px 24px 14px;
+    display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;
+    border-bottom: 1px solid var(--line);
+  }
+  .board-head h3{ font-family:'Fraunces',serif; font-size:19px; margin:0; font-weight:600; }
+  .board-head .meta{ font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--ink-soft); }
+
+  .scroller{ overflow-x:auto; }
+  .grid{ min-width: 880px; padding: 10px 24px 22px; }
+
+  .axis{ display:flex; margin-bottom:4px; }
+  .axis .rowlabel{ width:78px; flex:0 0 auto; }
+  .axis .timeline{ position:relative; flex:1; height:22px; }
+  .axis .tick{
+    position:absolute;
+    top:0;
+    transform:translateX(-50%);
+    width:calc(50 / 540 * 100%);
+    text-align:center;
+    font-family:'JetBrains Mono',monospace;
+    font-size:10.5px;
+    font-weight:600;
+    color:var(--ink-soft);
+  }
+  .axis .tick::after{
+    content:''; position:absolute; left:50%; top:16px; width:1px; height:6px; background:var(--line);
+  }
+
+  .day-row{ display:flex; align-items:stretch; min-height:64px; }
+  .day-row + .day-row{ border-top: 1px solid var(--line); }
+  .rowlabel{
+    width:78px; flex:0 0 auto;
+    display:flex; align-items:center;
+    font-family:'Fraunces',serif; font-weight:600; font-size:17px; color:var(--ink);
+  }
+  .timeline{ position:relative; flex:1; padding: 8px 0; }
+  .timeline .bg-grid{ position:absolute; inset:0; }
+  .timeline .gridline{ position:absolute; top:0; bottom:0; width:1px; background: var(--line); opacity:0.6;}
+
+  .block{
+    position:absolute; top:8px; bottom:8px;
+    border-radius: 9px;
+    padding: 6px 9px;
+    font-size: 11.5px;
+    line-height:1.25;
+    color:#111;
+    overflow:hidden;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    border-left: 3px solid rgba(0,0,0,0.18);
+    transition: transform .12s ease;
+  }
+  .block:hover{ transform: translateY(-2px); z-index:5; }
+  .block .code{ font-weight:700; display:block; }
+  .block .t{ font-family:'JetBrains Mono',monospace; font-size:9.5px; color:#222; opacity:1; display:block; margin-top:1px;}
+  .block .note{ font-size:9.5px; color:#222; opacity:1; font-style:italic; display:block; margin-top:2px;}
+  .block.sub{
+    top:auto; bottom: -12px; height: 20px; opacity: 0.95;
+    background: rgba(0,0,0,0.28) !important; backdrop-filter: blur(1px);
+    font-size:9.5px; display:flex; align-items:center; padding: 0 8px; border-left:none;
+  }
+
+  .breakbar{
+    position:absolute; top:2px; bottom:2px;
+    background: repeating-linear-gradient(135deg, var(--break-bg), var(--break-bg) 4px, #fdeec2 4px, #fdeec2 8px);
+    border-left: 1px dashed #d99a1b; border-right: 1px dashed #d99a1b;
+  }
+  .breakbar span{
+    position:absolute; top:50%; left:50%; transform: translate(-50%,-50%) rotate(90deg);
+    white-space:nowrap; font-family:'JetBrains Mono',monospace; font-size:8.5px;
+    color:#8a5c0a; font-weight:700; letter-spacing:0.04em;
+  }
+
+  .empty-note{
+    font-size: 11px; color: #b9b4a2; font-style: italic;
+    position:absolute; left:0; top:50%; transform:translateY(-50%);
+  }
+
+  /* ---- Footer / actions ---- */
+  .actions{
+    display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:14px;
+    margin-top: 22px;
+  }
+  .btn{
+    font-family:'JetBrains Mono',monospace; font-size:13px; font-weight:500;
+    padding: 11px 20px; border-radius: 10px; cursor:pointer;
+    border: 1.5px solid var(--ink); background:#fff; color:var(--ink);
+    transition: all .15s ease;
+    display:inline-flex; align-items:center; gap:8px;
+  }
+  .btn.primary{ background:var(--ink); color:#fff; }
+  .btn:hover{ transform: translateY(-1px); box-shadow: var(--shadow); }
+  .hint{ font-size:12px; color:var(--ink-soft); }
+
+  footer{ text-align:center; margin-top: 34px; font-size:11.5px; color:#a49f8f; font-family:'JetBrains Mono',monospace;}
+
+  @media print{
+    body{ background:#fff; padding:0; }
+    .panel, .actions, footer{ display:none !important; }
+    .board{ box-shadow:none; border:none; }
+    .grid{ min-width:0; padding: 0; }
+    header{ margin-bottom:14px; }
+  }
+  @media (max-width:600px){
+    h1{ font-size:28px; }
+    .term-badge{ text-align:left; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap" id="capture-root">
+
+  <header>
+    <div>
+      <p class="eyebrow">Personal Routine Builder</p>
+      <h1>BME <span>4-1</span> Timetable</h1>
+      <p class="sub">Pick your courses and lab group to render your own routine from the official department schedule.</p>
+    </div>
+    <div class="term-badge">
+      <b>L-4 / T-1</b>
+      Biomedical Engineering<br>Dept. Routine · 2026
+    </div>
+  </header>
+
+  <div class="panel">
+    <div class="row">
+      <h2 style="width:100%;margin-bottom:2px;">My Courses</h2>
+    </div>
+    <div class="row" id="courseRow"></div>
+
+    <div class="row">
+      <span class="label-inline">BME 404 Lab Group</span>
+      <div class="toggle-group" id="groupToggle">
+        <button data-g="A1" class="active">Group A1 (Sat)</button>
+        <button data-g="A2">Group A2 (Sun)</button>
+      </div>
+      <span class="hint">Sessional lab runs 2:30 – 5:00 PM on your assigned day.</span>
+    </div>
+  </div>
+
+  <div class="board" id="board">
+    <div class="board-head">
+      <h3>Your Weekly Routine</h3>
+      <span class="meta">8.00–4.50 PM · SAT–WED</span>
+    </div>
+    <div class="scroller">
+      <div class="grid" id="grid"></div>
+    </div>
+  </div>
+
+  <div class="actions">
+    <div class="legend" id="legend"></div>
+    <div style="display:flex; gap:10px;">
+      <button class="btn" id="btnPdf">🖶 Print as PDF</button>
+      <button class="btn primary" id="btnJpg">⬇ Download as JPG</button>
+    </div>
+  </div>
+
+  <footer>generated for personal scheduling use · double-check official notices for room & time changes</footer>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script>
+const DAY_START = 8*60, DAY_END = 17*60, SPAN = DAY_END-DAY_START;
+
+const courses = {
+  BME441:{code:'BME 441', name:'Neural Engineering', color:'#2C5F8A', checked:false},
+  BME449:{code:'BME 449', name:'Machine Learning for BME', color:'#1F7A6E', checked:true},
+  BME409:{code:'BME 409', name:'Tissue Engineering & Regenerative Medicine', color:'#9A541A', checked:false},
+  CSE495:{code:'CSE 495', name:'Bioinformatics', color:'#5A3C82', checked:true},
+  BME403:{code:'BME 403', name:'BME 403', color:'#B9472A', checked:true, mandatory:true},
+  BME400:{code:'BME 400', name:'Project / Thesis Lab', color:'#8B6508', checked:true, mandatory:true},
+  BME404:{code:'BME 404', name:'Sessional Lab', color:'#2F6F95', checked:true, hasGroup:true, mandatory:true},
+  HUM415:{code:'Hum 415', name:'Professional Ethics', color:'#5F8A58', checked:true, mandatory:true},
+  HUM441:{code:'Hum 441', name:'Engineering Economics', color:'#A45E67', checked:true, mandatory:true},
+};
+
+// times in minutes from midnight
+const schedule = {
+  Sat: [
+    {c:'BME441', s:480, e:530},    {c:'BME403', s:540, e:590},    {c:'CSE495', s:600, e:650},    {c:'HUM415', s:660, e:710},    {c:'HUM415', s:720, e:770},
+    {c:'BME404', group:'A1', s:870, e:1020},
+  ],
+  Sun: [
+    {c:'BME409', s:480, e:530},    {c:'BME449', s:540, e:590},    {c:'CSE495', s:600, e:650},    {c:'BME403', s:660, e:710},    {c:'HUM441', s:720, e:770},
+    {c:'BME404', group:'A2', s:870, e:1020},
+  ],
+  Mon: [
+    {c:'BME449', s:540, e:590},    {c:'CSE495', s:600, e:650},    {c:'HUM441', s:660, e:710},    {c:'HUM441', s:720, e:770},
+  ],
+  Tue: [
+    {c:'BME409', s:480, e:530},    {c:'BME441', s:540, e:590},    {c:'BME449', s:600, e:650},    {c:'BME400', s:660, e:1020, sub:{name:'DL Workshop', s:660, e:810}},
+  ],
+  Wed: [
+    {c:'BME409', s:480, e:530},    {c:'BME403', s:540, e:590},    {c:'BME441', s:600, e:650},    {c:'HUM441', s:660, e:710},    {c:'HUM415', s:720, e:770},
+  ],
+};
+
+let state = { group:'A1' };
+
+function pct(v){ return ((v-DAY_START)/SPAN*100).toFixed(3)+'%'; }
+function fmt(m){
+  let h = Math.floor(m/60), mi = m%60;
+  const ap = h>=12 ? 'pm':'am';
+  let h12 = h%12; if(h12===0) h12=12;
+  return h12 + (mi ? ':'+String(mi).padStart(2,'0') : '') + ap;
+}
+
+function buildCourseChips(){
+  const row = document.getElementById('courseRow');
+  row.innerHTML = '';
+  Object.entries(courses).forEach(([key,c])=>{
+    if(c.mandatory) return;
+    const chip = document.createElement('label');
+    chip.className = 'chip' + (c.checked?' on':'');
+    chip.style.setProperty('--dot', c.color);
+    chip.innerHTML = `<input type="checkbox" ${c.checked?'checked':''} data-key="${key}">
+      <span class="dot"></span>
+      <span class="code">${c.code}</span>
+      <span class="name">${c.name}</span>`;
+    chip.querySelector('input').addEventListener('change', e=>{
+      courses[key].checked = e.target.checked;
+      chip.classList.toggle('on', e.target.checked);
+      render();
+    });
+    row.appendChild(chip);
+  });
+}
+
+function buildLegend(){
+  const el = document.getElementById('legend');
+  el.innerHTML = '<span class="item"><span class="sw" style="background:var(--break)"></span>Break</span>' +
+    Object.values(courses).filter(c=>c.checked && !c.noSlots).map(c=>
+      `<span class="item"><span class="sw" style="background:${c.color}"></span>${c.code}</span>`
+    ).join('');
+}
+
+document.getElementById('groupToggle').addEventListener('click', e=>{
+  const btn = e.target.closest('button'); if(!btn) return;
+  state.group = btn.dataset.g;
+  [...btn.parentElement.children].forEach(b=>b.classList.toggle('active', b===btn));
+  render();
+});
+
+function buildAxis(){
+  const timeline=document.createElement('div');
+  timeline.className='timeline';
+  const labels=[
+    {start:480,end:530,text:'8.00–8.50'},
+    {start:540,end:590,text:'9.00–9.50'},
+    {start:600,end:650,text:'10.00–10.50'},
+    {start:660,end:710,text:'11.00–11.50'},
+    {start:720,end:770,text:'12.00–12.50'},
+    {start:780,end:830,text:'1.00–1.50'},
+    {start:840,end:890,text:'2.00–2.50'},
+    {start:900,end:950,text:'3.00–3.50'},
+    {start:960,end:1010,text:'4.00–4.50'}
+  ];
+  labels.forEach(l=>{
+    const t=document.createElement('div');
+    t.className='tick';
+    t.style.left=pct((l.start+l.end)/2);
+    t.textContent=l.text;
+    timeline.appendChild(t);
+  });
+  return timeline;
+}
+
+function render(){
+  buildLegend();
+  const grid = document.getElementById('grid');
+  grid.innerHTML = '';
+
+  const axisRow = document.createElement('div');
+  axisRow.className = 'axis';
+  const axisLabel = document.createElement('div');
+  axisLabel.className = 'rowlabel';
+  axisRow.appendChild(axisLabel);
+  axisRow.appendChild(buildAxis());
+  grid.appendChild(axisRow);
+
+  Object.entries(schedule).forEach(([day, items])=>{
+    const dayRow = document.createElement('div');
+    dayRow.className = 'day-row';
+
+    const label = document.createElement('div');
+    label.className = 'rowlabel';
+    label.textContent = day;
+    dayRow.appendChild(label);
+
+    const timeline = document.createElement('div');
+    timeline.className = 'timeline';
+
+    // hour gridlines
+    for(let h=8; h<=17; h++){
+      const gl = document.createElement('div');
+      gl.className = 'gridline';
+      gl.style.left = pct(h*60);
+      timeline.appendChild(gl);
+    }
+
+    let visibleCount = 0;
+
+    items.forEach(item=>{
+      if(item.brk){
+        const b = document.createElement('div');
+        b.className = 'breakbar';
+        b.style.left = pct(item.s);
+        b.style.width = `calc(${pct(item.e)} - ${pct(item.s)})`;
+        b.innerHTML = '<span>break</span>';
+        timeline.appendChild(b);
+        return;
+      }
+      const course = courses[item.c];
+      if(!course) return;
+      if(item.group && item.group !== state.group) return;
+      if(!course.checked) return;
+
+      visibleCount++;
+      const block = document.createElement('div');
+      block.className = 'block';
+      block.style.left = pct(item.s);
+      block.style.width = `calc(${pct(item.e)} - ${pct(item.s)})`;
+      block.style.background = course.color;
+      block.style.borderLeftColor = 'rgba(0,0,0,0.25)';
+      block.innerHTML = `<span class="code">${course.code}</span><span class="t">${fmt(item.s)}–${fmt(item.e)}</span>` +
+        (item.note ? `<span class="note">${item.note}</span>` : '');
+      timeline.appendChild(block);
+
+      if(item.sub && course.checked){
+        const sub = document.createElement('div');
+        sub.className = 'block sub';
+        sub.style.left = pct(item.sub.s);
+        sub.style.width = `calc(${pct(item.sub.e)} - ${pct(item.sub.s)})`;
+        sub.textContent = `${item.sub.name} · ${fmt(item.sub.s)}–${fmt(item.sub.e)}`;
+        timeline.appendChild(sub);
+      }
+    });
+
+    if(visibleCount===0){
+      const note = document.createElement('div');
+      note.className = 'empty-note';
+      note.style.left = pct(DAY_START+10);
+      note.textContent = 'No selected classes';
+      timeline.appendChild(note);
+    }
+
+    dayRow.appendChild(timeline);
+    grid.appendChild(dayRow);
+  });
+}
+
+buildCourseChips();
+render();
+
+document.getElementById('btnPdf').addEventListener('click', ()=> window.print());
+document.getElementById('btnJpg').addEventListener('click', ()=>{
+  const target = document.getElementById('board');
+  const scroller = target.querySelector('.scroller');
+  const grid = document.getElementById('grid');
+
+  // Temporarily let the scroller show its full width instead of clipping it
+  const prevOverflow = scroller.style.overflow;
+  const prevWidth = scroller.style.width;
+  scroller.style.overflow = 'visible';
+  scroller.style.width = grid.scrollWidth + 'px';
+
+  html2canvas(target, {
+    backgroundColor:'#ffffff',
+    scale:2,
+    width: target.scrollWidth,
+    height: target.scrollHeight,
+    windowWidth: target.scrollWidth,
+    windowHeight: target.scrollHeight
+  }).then(canvas=>{
+    const link = document.createElement('a');
+    link.download = 'BME_4-1_timetable.jpg';
+    link.href = canvas.toDataURL('image/jpeg', 0.95);
+    link.click();
+  }).finally(()=>{
+    scroller.style.overflow = prevOverflow;
+    scroller.style.width = prevWidth;
+  });
+});
+</script>
+</body>
+</html>
