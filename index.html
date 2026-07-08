@@ -473,13 +473,11 @@ function render(){
     dayRow.appendChild(timeline);
     grid.appendChild(dayRow);
   });
-}
-block.innerHTML =
+  block.innerHTML =
   `<span class="code">${course.code}</span>
    <span class="t">${fmt(item.s)}–${fmt(item.e)}</span>` +
   (item.note ? `<span class="note">${item.note}</span>` : '');
-buildCourseChips();
-render();
+}
 
 document.getElementById('btnPdf').addEventListener('click', ()=> window.print());
 document.getElementById('btnJpg').addEventListener('click', ()=>{
