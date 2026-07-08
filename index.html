@@ -297,26 +297,27 @@ const courses = {
   BME404:{code:'BME 404', name:'Sessional Lab', color:'#2F6F95', checked:true, hasGroup:true, mandatory:true},
   HUM415:{code:'Hum 415', name:'Professional Ethics', color:'#5F8A58', checked:true, mandatory:true},
   HUM441:{code:'Hum 441', name:'Engineering Economics', color:'#A45E67', checked:true, mandatory:true},
+  CT:{code:'CT', name:'CSE 495', color:'#6C757D', checked:true, mandatory:true},
 };
 
 // times in minutes from midnight
 const schedule = {
   Sat: [
-    {c:'BME441', s:480, e:530},    {c:'BME403', s:540, e:590},    {c:'CSE495', s:600, e:650},    {c:'HUM415', s:660, e:710},    {c:'HUM415', s:720, e:770},
-    {c:'BME404', group:'A1', s:870, e:1020},
+    {c:'BME403', s:540, e:590},    {c:'CSE495', s:600, e:650},    {c:'HUM415', s:660, e:710},    {c:'HUM415', s:720, e:770},
+    {c:'BME404 (Assessment + Lab 02)', group:'A1', s:870, e:1020},
   ],
   Sun: [
-    {c:'BME409', s:480, e:530},    {c:'CSE495', s:600, e:650},    {c:'BME403', s:660, e:710},    {c:'BME449', s:720, e:770},
-    {c:'BME404', group:'A2', s:870, e:1020},
+    {c:'BME441', s:510, e:600},    {c:'CSE495', s:600, e:650},    {c:'BME403', s:660, e:710},    {c:'BME449', s:720, e:770},
+    {c:'BME404 (Assessment + Lab 02)', group:'A2', s:870, e:1020},
   ],
   Mon: [
-    {c:'BME449', s:540, e:590},    {c:'CSE495', s:600, e:650},    {c:'HUM441', s:660, e:710},    {c:'HUM441', s:720, e:770},
+    {c:'CT:CSE495',s: 480,e:510}, {c:'BME449', s:540, e:590},    {c:'CSE495', s:600, e:650},    {c:'HUM441', s:660, e:710},    {c:'HUM441', s:720, e:770},
   ],
   Tue: [
-    {c:'BME409', s:480, e:530},    {c:'BME441', s:540, e:590},    {c:'BME449', s:600, e:650},    {c:'BME400', s:660, e:1020, sub:{name:'DL Workshop', s:660, e:810}},
+    {c:'BME409', s:480, e:530},    {c:'BME441', s:540, e:590},    {c:'BME449', s:600, e:650},   {c:'BME441', s:660, e:710},  {c:'BME400', s:720, e:1020, sub:{name:'DL Workshop', s:720, e:900}},
   ],
   Wed: [
-    {c:'BME409', s:480, e:530},    {c:'BME403', s:540, e:590},    {c:'BME441', s:600, e:650},    {c:'HUM441', s:660, e:710},    {c:'HUM415', s:720, e:770},
+    {c:'CT:BME449', s: 500, e:530}, {c:'BME409', s:480, e:530},    {c:'BME403', s:540, e:590},    {c:'BME441', s:600, e:650},    {c:'HUM441', s:660, e:710},    {c:'HUM415', s:720, e:770},
   ],
 };
 
