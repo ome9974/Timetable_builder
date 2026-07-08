@@ -311,13 +311,13 @@ const schedule = {
     {c:'BME404 (Assessment + Lab 02)', group:'A2', s:870, e:1020},
   ],
   Mon: [
-    {c:'CT:CSE495',s: 480,e:510}, {c:'BME449', s:540, e:590},    {c:'CSE495', s:600, e:650},    {c:'HUM441', s:660, e:710},    {c:'HUM441', s:720, e:770},
+    {c:'CT',note:'CSE495',s: 480,e:510}, {c:'BME449', s:540, e:590},    {c:'CSE495', s:600, e:650},    {c:'HUM441', s:660, e:710},    {c:'HUM441', s:720, e:770},
   ],
   Tue: [
     {c:'BME409', s:480, e:530},    {c:'BME441', s:540, e:590},    {c:'BME449', s:600, e:650},   {c:'BME441', s:660, e:710},  {c:'BME400', s:720, e:1020, sub:{name:'DL Workshop', s:720, e:900}},
   ],
   Wed: [
-    {c:'CT:BME449', s: 500, e:530}, {c:'BME409', s:480, e:530},    {c:'BME403', s:540, e:590},    {c:'BME441', s:600, e:650},    {c:'HUM441', s:660, e:710},    {c:'HUM415', s:720, e:770},
+    {c:'CT',note:'BME449',  s: 500, e:530}, {c:'BME409', s:480, e:530},    {c:'BME403', s:540, e:590},    {c:'BME441', s:600, e:650},    {c:'HUM441', s:660, e:710},    {c:'HUM415', s:720, e:770},
   ],
 };
 
@@ -474,7 +474,10 @@ function render(){
     grid.appendChild(dayRow);
   });
 }
-
+block.innerHTML =
+  `<span class="code">${course.code}</span>
+   <span class="t">${fmt(item.s)}–${fmt(item.e)}</span>` +
+  (item.note ? `<span class="note">${item.note}</span>` : '');
 buildCourseChips();
 render();
 
@@ -507,6 +510,7 @@ document.getElementById('btnJpg').addEventListener('click', ()=>{
     scroller.style.width = prevWidth;
   });
 });
+  
 </script>
 </body>
 </html>
