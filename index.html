@@ -163,21 +163,48 @@
   .timeline .gridline{ position:absolute; top:0; bottom:0; width:1px; background: var(--line); opacity:0.6;}
 
   .block{
-    position:absolute; top:8px; bottom:8px;
-    border-radius: 9px;
-    padding: 6px 9px;
-    font-size: 11.5px;
+    position:absolute;
+    top:8px;
+    bottom:8px;
+
+    border-radius:12px;
+
+    padding:8px 10px;
+
+    font-size:12px;
     line-height:1.25;
+
     color:#111;
+
     overflow:hidden;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
-    border-left: 3px solid rgba(0,0,0,0.18);
-    transition: transform .12s ease;
+
+    border:1px solid rgba(0,0,0,.08);
+    border-left:5px solid rgba(0,0,0,.22);
+
+    box-shadow:
+        0 2px 6px rgba(0,0,0,.10),
+        inset 0 1px rgba(255,255,255,.25);
+
+    transition:.15s;
   }
   .block:hover{ transform: translateY(-2px); z-index:5; }
-  .block .code{ font-weight:700; display:block; }
-  .block .t{ font-family:'JetBrains Mono',monospace; font-size:9.5px; color:#222; opacity:1; display:block; margin-top:1px;}
-  .block .note{ font-size:9.5px; color:#222; opacity:1; font-style:italic; display:block; margin-top:2px;}
+  .block .code{
+    font-size:15px;
+    font-weight:800;
+    letter-spacing:.2px;
+  }
+
+.block .t{
+    font-size:11px;
+    font-weight:600;
+    color:#222;
+  }
+
+.block .note{
+    font-size:11px;
+    font-style:italic;
+    color:#222;
+  }
   .block.sub{
     top:auto; bottom: -12px; height: 20px; opacity: 0.95;
     background: rgba(0,0,0,0.28) !important; backdrop-filter: blur(1px);
@@ -288,18 +315,83 @@
 const DAY_START = 8*60, DAY_END = 17*60, SPAN = DAY_END-DAY_START;
 
 const courses = {
-  BME441:{code:'BME 441', name:'Neural Engineering', color:'#2C5F8A', checked:false},
-  BME449:{code:'BME 449', name:'Machine Learning for BME', color:'#1F7A6E', checked:true},
-  BME409:{code:'BME 409', name:'Tissue Engineering & Regenerative Medicine', color:'#9A541A', checked:false},
-  CSE495:{code:'CSE 495', name:'Bioinformatics', color:'#5A3C82', checked:true},
-  BME403:{code:'BME 403', name:'BME 403', color:'#B9472A', checked:true, mandatory:true},
-  BME400:{code:'BME 400', name:'Project / Thesis Lab', color:'#8B6508', checked:true, mandatory:true},
-  BME404:{code:'BME 404', name:'Sessional Lab', color:'#2F6F95', checked:true, hasGroup:true, mandatory:true},
-  HUM415:{code:'Hum 415', name:'Professional Ethics', color:'#5F8A58', checked:true, mandatory:true},
-  HUM441:{code:'Hum 441', name:'Engineering Economics', color:'#A45E67', checked:true, mandatory:true},
-  CT:{code:'CT', name:'CSE 495', color:'#6C757D', checked:true, mandatory:true},
-};
+  BME441:{
+    code:'BME 441',
+    name:'Neural Engineering',
+    color:'#4A90E2',   // Bright Blue
+    checked:false
+  },
 
+  BME449:{
+    code:'BME 449',
+    name:'Machine Learning for BME',
+    color:'#2BB3A3',   // Teal
+    checked:true
+  },
+
+  BME409:{
+    code:'BME 409',
+    name:'Tissue Engineering & Regenerative Medicine',
+    color:'#F2994A',   // Orange
+    checked:false
+  },
+
+  CSE495:{
+    code:'CSE 495',
+    name:'Bioinformatics',
+    color:'#9B6DDB',   // Purple
+    checked:true
+  },
+
+  BME403:{
+    code:'BME 403',
+    name:'BME 403',
+    color:'#F26B4A',   // Coral Red
+    checked:true,
+    mandatory:true
+  },
+
+  BME400:{
+    code:'BME 400',
+    name:'Project / Thesis Lab',
+    color:'#D4A017',   // Gold
+    checked:true,
+    mandatory:true
+  },
+
+  BME404:{
+    code:'BME 404',
+    name:'Sessional Lab',
+    color:'#56A6D8',   // Sky Blue
+    checked:true,
+    hasGroup:true,
+    mandatory:true
+  },
+
+  HUM415:{
+    code:'Hum 415',
+    name:'Professional Ethics',
+    color:'#8BC34A',   // Lime Green
+    checked:true,
+    mandatory:true
+  },
+
+  HUM441:{
+    code:'Hum 441',
+    name:'Engineering Economics',
+    color:'#E78A98',   // Pink
+    checked:true,
+    mandatory:true
+  },
+
+  CT:{
+    code:'CT',
+    name:'CSE 495',
+    color:'#C5CBD3',   // Light Gray
+    checked:true,
+    mandatory:true
+  },
+};
 // times in minutes from midnight
 const schedule = {
   Sat: [
