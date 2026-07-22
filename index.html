@@ -391,46 +391,46 @@ const courses = {
     mandatory:true
   }
 };
-// times in minutes from midnight
+// times in minutes from midnight (540- 9AM, 600-10AM, 660-11AM, 720-12AM.)
 const weeklyCTs = {
     Sat:[
         {
-            c:'CSE495',
-            s:600,
-            e:650
+            c:'HUM415',
+            s:660,
+            e:710
         }
     ],
 
-    Tue:[
+    Mon:[
         {
-            c:'BME409',
-            s:480,
-            e:530
+            c:'HUM441',
+            s:660,
+            e:710
         }
     ],
 
     Wed:[
         {
-            c:'BME403',
-            s:540,
-            e:590
+            c:'BME441',
+            s:600,
+            e:650
         }
     ]
 };
 const schedule = {
   Sat: [
-    {c:'BME403', s:540, e:590}, {c:'HUM415', s:660, e:710},    {c:'HUM415', s:720, e:770},
-    {c:'BME404', group:'A1', s:870, e:1020, note:'CA + Lab 02 (2)'}
+    {c:'BME403', s:540, e:590}, {c:'CSE495', s:600, e:650}, {c:'HUM415', s:660, e:710},    {c:'HUM415', s:720, e:770},
+    {c:'BME404', group:'A1', s:870, e:1020, note:'Lab 03 Only'}
   ],
   Sun: [
     {c:'BME409', s:540, e:590}, {c:'CSE495', s:600, e:650},    {c:'BME403', s:660, e:710},    {c:'BME449', s:720, e:770},
-    {c:'BME404', group:'A2', s:870, e:1020, note:'CA + Lab 02 (2)'}
+    {c:'BME404', group:'A2', s:870, e:1020, note:'Lab 03 Only'}
   ],
   Mon: [
-     {c:'BME449', s:540, e:590},   {c:'CSE495', s:600, e:650},    {c:'HUM441', s:660, e:710},    {c:'HUM441', s:720, e:770},
+     {c:'BME449', s:540, e:590},   {c:'CSE495', s:600, e:650}, {c:'HUM441', s:720, e:770},
   ],
   Tue: [
-    {c:'BME409', s:480, e:530},    {c:'BME441', s:540, e:590},    {c:'BME449', s:600, e:650},   {c:'BME441', s:660, e:710},  {c:'BME400', s:720, e:1020, sub:{name:'DL Workshop',note:'Submission + New Lab', s:720, e:900}},
+    {c:'BME409', s:480, e:530},    {c:'BME441', s:540, e:590},    {c:'BME449', s:600, e:650},   {c:'BME441', s:660, e:710},  {c:'BME400', s:720, e:1020, /*sub:{name:'DL Workshop',note:'Submission + New Lab', s:720, e:900}*/},
   ],
   Wed: [
     {c:'BME409', s:480, e:530},    {c:'BME403', s:540, e:590},    {c:'BME441', s:600, e:650},    {c:'HUM441', s:660, e:710},    {c:'HUM415', s:720, e:770},
