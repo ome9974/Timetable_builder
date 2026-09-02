@@ -298,7 +298,7 @@
 
   <div class="board" id="board">
     <div class="board-head">
-      <h3>Your Weekly Routine (Week 10)</h3>
+      <h3>Your Weekly Routine (Week 11)</h3>
       <span class="meta">8.00–5.00 PM · SAT–WED</span>
     </div>
     <div class="scroller">
@@ -391,49 +391,49 @@ const courses = {
     mandatory:true
   }
 };
-// times in minutes from midnight (540- 9AM, 600-10AM, 660-11AM, 720-12AM.)
+// times in minutes from midnight (540- 9AM, 600-10AM, 660-11AM, 720-12AM, 780- 1AM.)
 const weeklyCTs = {
     Sat:[
         {
-            c:'HUM415',
-            s:660,
-            e:710
+            c:'BME449',
+            s:780,
+            e:830
         }
     ],
     Sun:[
         {
-            c:'CSE495',
-            s:600,
-            e:650
+            c:'BME409',
+            s:540,
+            e:600
         }
     ],
     Tue:[
         {
-            c:'BME449',
+            c:'BME403',
             s:490,
             e:540
         }
     ],
    Wed:[
         {
-            c:'HUM441',
-            s:660,
-            e:710
+            c:'BME441',
+            s:780,
+            e:820
         }
     ]
 };
 const schedule = {
   Sat: [
-    /*{c:'BME449', s:540, e:590},*/ {c:'CSE495', s:600, e:650},{c:'HUM415', s:660, e:710},{c:'HUM415', s:720, e:770}, {c:'BME404', group:'A1', s:870, e:1020, note:'Lab 06'}
+    {c:'BME449', s:540, e:590}, {c:'CSE495', s:600, e:650},{c:'HUM415', s:660, e:710},{c:'HUM415', s:720, e:770}, {c:'BME404', group:'A1', s:870, e:1020, note:'Thermal (subgroup A)'}
   ],
   Sun: [
-    {c:'BME409', s:540, e:590}, {c:'CSE495', s:600, e:650},    {c:'BME403', s:660, e:710},    {c:'BME441', s:720, e:825}, {c:'BME404', group:'A2', s:870, e:1020, note:'Lab 05'}
+    {c:'BME409', s:540, e:590}, {c:'CSE495', s:600, e:650},    {c:'BME403', s:660, e:710},    {c:'BME441', s:720, e:770}, {c:'BME404', group:'A1', s:870, e:1020, note:'microCT (subgroup B & C)'}
   ],
   Mon: [
      {c:'BME403', s:540, e:590},   {c:'CSE495', s:600, e:650}, {c:'HUM441', s:660, e:710}, {c:'HUM441', s:720, e:770}, {c:'BME449', s:780, e:830}
   ],
   Tue: [
-      {c:'BME449', s:540, e:590},    {c:'BME409', s:600, e:650},{c:'BME400', s:660, e:1020, /*sub:{name:'DL Workshop',note:'Submission + New Lab', s:720, e:900}*/},
+      {c:'BME449', s:540, e:590},    {c:'BME409', s:600, e:650}, {c:'BME441', s:660, e:710} ,{c:'BME400', s:720, e:1020, /*sub:{name:'DL Workshop',note:'Submission + New Lab', s:720, e:900}*/},
   ],
   Wed: [
     {c:'BME409', s:480, e:530},    {c:'BME403', s:540, e:590},    {c:'BME441', s:600, e:650},   {c:'HUM441', s:660, e:710},  {c:'HUM415', s:720, e:770},
